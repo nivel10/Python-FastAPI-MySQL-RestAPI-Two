@@ -1,0 +1,16 @@
+# list containers
+    $docker ps -a
+
+# run containers
+    $docker start <containerName>
+
+# connect by bash
+    $docker exec -it <containerName> bash
+
+# mySQL - create database
+    #mysql -u root -p<password>
+        mysql> create database <dataBaseName>;
+        mysq> show databases;
+        mysql> use <dataBaseName>;
+        mysql> show tables;
+        mysql> drop database <dataBaseName>;

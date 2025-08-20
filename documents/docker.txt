@@ -14,3 +14,8 @@
         mysql> use <dataBaseName>;
         mysql> show tables;
         mysql> drop database <dataBaseName>;
+
+        # on mysql do this to activate access to database from user root
+        mysql> ALTER USER 'root'@'%' IDENTIFIED WITH caching_sha2_password BY '123456';
+        mysql> GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
+        mysql> FLUSH PRIVILEGES;

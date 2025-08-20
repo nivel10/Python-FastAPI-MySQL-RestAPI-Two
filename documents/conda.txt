@@ -1,0 +1,11 @@
+# create environment
+    $conda create --name <environmentName>
+
+# activate environment
+    $conda activate <environmentName>
+
+# list environments
+    $conda env list
+
+# remove environment
+    $conda env remove --name <environmentName>

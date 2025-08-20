@@ -1,0 +1,14 @@
+# instal librery
+    $pip install <libraryName>
+
+# list libraries
+    $pip list
+
+# remove library
+    $pip uninstall <libraryName>
+
+# generate requirements file
+    $pip freeze > requirements.txt
+
+# install libraries from file
+    $pip install -r requirements.txt

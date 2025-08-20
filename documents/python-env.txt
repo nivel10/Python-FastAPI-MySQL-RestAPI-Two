@@ -1,0 +1,8 @@
+# create virtual environment
+    $python -m env <environmentName>
+
+# activate environment
+    $source venv/bin/activate
+
+# deactivate environment
+    $deactivate

@@ -87,7 +87,7 @@ async def create_hero(hero: HeroCreate, session: session_dep):
         )
      
 @app.get('/heroes/', tags=['heroes'], response_model=list[HeroPublic])
-async def get_heroes(
+async def get_hero(
      session: session_dep,
      offset: int = 0,
      limit: Annotated[int, Query(le=100)] = 100,
@@ -102,7 +102,7 @@ async def get_heroes(
           )
 
 @app.get('/heroes/{id}', tags=['heroes'], response_model=HeroPublic)
-async def get_heroes(id: int, session: session_dep):
+async def get_hero(id: int, session: session_dep):
      try:
           hero = session.get(Hero, id)
           if not hero:
@@ -115,5 +115,23 @@ async def get_heroes(id: int, session: session_dep):
           raise HTTPException(
                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                detail=str(ex),
+          )
+
+@app.patch('/heroes/{id}', tags=['heroes'], response_model=HeroPublic)
+async def update_hero(id: int, hero: HeroUpdate, session: session_dep,):
+     try:
+          hero_found = await get_hero(id=id, session=session)
+
+          hero_updated = hero.model_dump(exclude_unset=True)
+          hero_found.sqlmodel_update(hero_updated)
+          session.add(hero_found)
+          session.commit()
+          session.refresh(hero_found)
+          
+          return hero_found
+     except Exception as ex:
+          raise HTTPException(
+               status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+               detail=str(ex)
           )
 #endregion API paths

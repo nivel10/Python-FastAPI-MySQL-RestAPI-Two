@@ -72,20 +72,6 @@ async def on_startup():
     except Exception as ex:
         print(str(ex))
 
-@app.post('/heroes/', tags=['heroes'], response_model=HeroPublic)
-async def create_hero(hero: HeroCreate, session: session_dep):
-     try:
-          db_hero = Hero.model_validate(hero)
-          session.add(db_hero)
-          session.commit()
-          session.refresh(db_hero)
-          return db_hero
-     except Exception as ex:
-          raise HTTPException(
-               status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-               detail=str(ex)
-        )
-     
 @app.get('/heroes/', tags=['heroes'], response_model=list[HeroPublic])
 async def get_hero(
      session: session_dep,
@@ -100,6 +86,20 @@ async def get_hero(
                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                detail=str(ex),
           )
+
+@app.post('/heroes/', tags=['heroes'], response_model=HeroPublic)
+async def create_hero(hero: HeroCreate, session: session_dep):
+     try:
+          db_hero = Hero.model_validate(hero)
+          session.add(db_hero)
+          session.commit()
+          session.refresh(db_hero)
+          return db_hero
+     except Exception as ex:
+          raise HTTPException(
+               status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+               detail=str(ex)
+        )
 
 @app.get('/heroes/{id}', tags=['heroes'], response_model=HeroPublic)
 async def get_hero(id: int, session: session_dep):
@@ -127,11 +127,25 @@ async def update_hero(id: int, hero: HeroUpdate, session: session_dep,):
           session.add(hero_found)
           session.commit()
           session.refresh(hero_found)
-          
+
           return hero_found
      except Exception as ex:
           raise HTTPException(
                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                detail=str(ex)
           )
-#endregion API paths
+
+@app.delete('/heroes/{id}', tags=['heroes'], response_model=HeroPublic)
+async def delete_hero(id: int, session: session_dep):
+     try:
+          hero_found = await get_hero(id=id, session=session)
+
+          session.delete(hero_found)
+          session.commit()
+          return hero_found
+     except Exception as ex:
+          raise HTTPException(
+               status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+               detail=str(ex),
+          )
+#endregion API - paths
